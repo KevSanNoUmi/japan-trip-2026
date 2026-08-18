@@ -1,0 +1,260 @@
+/* Carnet Japon 2026 — skin Liquid Glass inspiré de Carnet Pêche JP V6.5.23
+   La logique applicative reste dans index.html : ce fichier ne modifie que le rendu. */
+:root{
+  --bg:#0F1720;
+  --surface:#172233;
+  --surface-2:#1E2C40;
+  --surface-3:#26364E;
+  --accent-rgb:0,174,116;
+  --accent:rgb(var(--accent-rgb));
+  --accent-dim:#016E4A;
+  --glass-tint:rgba(23,34,51,.72);
+  --glass-panel:rgba(23,34,51,.48);
+  --glass-panel-soft:rgba(30,44,64,.58);
+  --glass-edge:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.28);
+  --glass-lift:0 8px 32px rgba(0,0,0,.40), 0 2px 8px rgba(0,0,0,.22);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+
+  /* Compatibilité avec les tokens historiques de carnetjp26. */
+  --panel:var(--surface);
+  --panel2:var(--surface-2);
+  --line:rgba(var(--accent-rgb),.16);
+  --txt:#EDEEF0;
+  --mut:#8B97A8;
+  --blue:#6FB1D6;
+  --green:var(--accent);
+  --red:#E89AA8;
+  --red2:#D96A79;
+  --gold:#D6DBE2;
+  --navoff:#8491A3;
+}
+
+html{background:var(--bg);}
+body{
+  background:transparent;
+  color:var(--txt);
+  padding-bottom:calc(86px + var(--safe-bottom));
+  overscroll-behavior-y:none;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 62% 46% at 10% 4%, rgba(34,190,214,.58) 0%, transparent 68%),
+    radial-gradient(ellipse 54% 44% at 92% 15%, rgba(46,216,176,.48) 0%, transparent 66%),
+    radial-gradient(ellipse 52% 54% at 20% 56%, rgba(38,152,200,.46) 0%, transparent 70%),
+    radial-gradient(ellipse 56% 42% at 86% 74%, rgba(42,208,172,.42) 0%, transparent 66%),
+    radial-gradient(ellipse 60% 40% at 38% 100%, rgba(30,172,196,.38) 0%, transparent 70%),
+    var(--bg);
+}
+
+/* Chrome supérieur : verre continu, sans séparateur dur. */
+header{
+  position:sticky;
+  top:0;
+  z-index:12;
+  max-width:none;
+  margin:0;
+  padding:calc(15px + var(--safe-top)) max(16px, calc((100vw - 760px)/2 + 16px)) 12px;
+  background:var(--glass-tint);
+  border:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.17), 0 10px 30px rgba(0,0,0,.18);
+  -webkit-backdrop-filter:blur(20px) saturate(190%);
+  backdrop-filter:blur(20px) saturate(190%);
+}
+header h1{
+  font-size:clamp(18px,4.7vw,22px);
+  font-weight:600;
+  letter-spacing:-.015em;
+}
+header h1 small{color:var(--accent);text-shadow:0 0 14px rgba(var(--accent-rgb),.45);}
+header h1 span{color:var(--txt)!important;opacity:.62!important;letter-spacing:.24em!important;}
+#jj{
+  color:#0F1720!important;
+  background:linear-gradient(160deg, rgba(255,255,255,.34) 0%, rgba(var(--accent-rgb),.94) 100%)!important;
+  border:1px solid rgba(255,255,255,.30)!important;
+  border-radius:999px!important;
+  padding:6px 12px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55), inset 0 -2px 4px rgba(0,0,0,.20), 0 4px 14px rgba(0,0,0,.30)!important;
+}
+
+main{padding:16px 14px 28px;}
+
+/* Carte principale : matière de verre. */
+.card,
+.card.hpro,
+.card.hper{
+  background:var(--glass-panel);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+  box-shadow:var(--glass-edge), var(--glass-lift);
+  -webkit-backdrop-filter:blur(18px) saturate(165%);
+  backdrop-filter:blur(18px) saturate(165%);
+  overflow:hidden;
+}
+.card.hpro{border-left:3px solid rgba(111,177,214,.78);}
+.card.hper{border-left:3px solid rgba(var(--accent-rgb),.86);}
+.card h2{font-size:17px;font-weight:600;letter-spacing:-.01em;}
+
+/* Pas de verre sur verre : les composants internes redeviennent des surfaces opaques. */
+textarea,input.f,select.f,
+.train,.taq,.addrow input,.addrow select,
+.destgrid button,.stp .ic,.chp,.qrit,
+.catchli,.cloudmap,.gpsrow input{
+  background:var(--surface-2);
+  border-color:var(--line);
+}
+textarea,input.f,select.f,.addrow input,.addrow select,.gpsrow input{
+  border-radius:10px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+textarea:focus,input.f:focus,select.f:focus,.addrow input:focus,.addrow select:focus,.gpsrow input:focus{
+  border-color:rgba(var(--accent-rgb),.72);
+  box-shadow:0 0 0 3px rgba(var(--accent-rgb),.11);
+}
+
+/* Titres de section : traitement éditorial discret du Carnet Pêche. */
+.sec{
+  background:transparent;
+  color:#D6DBE2;
+  margin:18px 0 9px;
+  padding:0;
+  min-height:0;
+  border:0;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  line-height:1.35;
+}
+.sec .cnt{color:var(--mut);font-weight:500;}
+label.f{color:var(--mut);font-size:11px;letter-spacing:.10em;}
+.dates,.subh{color:var(--accent);}
+
+/* Pastilles / actions cohérentes avec le verre du projet Pêche. */
+.pill,.navibtn,.gpsbtn,.cta,.sessbtn,.addrow button{
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.18);
+  background:linear-gradient(160deg, rgba(255,255,255,.20) 0%, rgba(255,255,255,.06) 42%, rgba(0,0,0,.22) 100%);
+  color:#F2F5F8;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.40), inset 0 -2px 4px rgba(0,0,0,.28), 0 4px 12px rgba(0,0,0,.30), 0 0 0 1px rgba(var(--accent-rgb),.14);
+  transition:transform .12s cubic-bezier(.23,1,.32,1), background .18s ease, box-shadow .12s ease;
+}
+.pill:active,.navibtn:active,.gpsbtn:active,.cta:active,.sessbtn:active,.addrow button:active{
+  transform:translateY(2px) scale(.98);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 1px 4px rgba(0,0,0,.40);
+}
+.cta,.sessbtn.go,.addrow button{
+  color:#0F1720;
+  background:linear-gradient(160deg, rgba(255,255,255,.34) 0%, rgba(var(--accent-rgb),.94) 100%);
+  border-color:rgba(255,255,255,.28);
+}
+.sessbtn:not(.go){background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(217,106,121,.72));}
+.navibtn,.gpsbtn{display:block;color:var(--accent);border-color:rgba(var(--accent-rgb),.35);}
+
+.tag{border-radius:999px;padding:3px 9px;}
+.tag.pro{background:rgba(111,177,214,.12);color:#91C5E2;border:1px solid rgba(111,177,214,.24);}
+.tag.perso{background:rgba(var(--accent-rgb),.10);color:#62D2AB;border:1px solid rgba(var(--accent-rgb),.26);}
+.tag.archive{background:rgba(139,151,168,.09);color:var(--mut);border:1px solid rgba(139,151,168,.16);}
+
+.train{border-radius:12px;}
+.train .badge{background:rgba(111,177,214,.16);border:1px solid rgba(111,177,214,.30);color:#A8D4EA;border-radius:999px;}
+.train.critique .badge{background:rgba(232,154,168,.14);border-color:rgba(232,154,168,.30);color:#F0A8B5;}
+.taq{border-left:3px solid var(--accent);border-radius:0 12px 12px 0;}
+.taq .d b{color:var(--accent);}
+.taq input.no{background:var(--surface);}
+
+.hotellink,.adr,.back,.tel,.cloudmap .cmfoot a{color:var(--accent);}
+.mynote,.chp b,.phr .ro,.tot.big,.zonebadge{color:#B9C8D7;}
+.zonebadge,.tbadge{background:rgba(var(--accent-rgb),.09);color:var(--accent);border:1px solid rgba(var(--accent-rgb),.18);}
+input[type=checkbox]{accent-color:var(--accent);}
+
+.li,.poi,.phr,.tot{border-bottom-color:rgba(255,255,255,.07);}
+.destgrid button,.chp{border-color:rgba(255,255,255,.10);}
+.destgrid button.pro{border-color:rgba(111,177,214,.32);}
+.destgrid button.perso{border-color:rgba(var(--accent-rgb),.34);}
+
+/* Calendrier : conserve les couleurs métier, mais calme les cellules. */
+.cal{gap:5px;}
+.cal .day{border-radius:10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 2px 8px rgba(0,0,0,.16);}
+.cal .day.now{box-shadow:0 0 0 2px rgba(var(--accent-rgb),.58),inset 0 1px 0 rgba(255,255,255,.18);}
+.cal .day.now::after{background:var(--accent);color:#0F1720;box-shadow:0 3px 9px rgba(0,0,0,.28);}
+
+/* QR / pêche / modales. */
+.qrit{border-radius:12px;transition:transform .12s ease,border-color .12s ease;}
+.qrit:active{transform:scale(.98);border-color:rgba(var(--accent-rgb),.55);}
+.spbtn{background:rgba(237,238,240,.91);border-color:rgba(255,255,255,.55);box-shadow:0 5px 16px rgba(0,0,0,.22);}
+.sessbar{background:rgba(var(--accent-rgb),.08);border-color:rgba(var(--accent-rgb),.36);border-radius:12px;}
+.sessbar.live{background:rgba(217,106,121,.10);border-color:rgba(217,106,121,.42);}
+#capov{background:rgba(4,8,14,.58);-webkit-backdrop-filter:blur(14px) saturate(140%);backdrop-filter:blur(14px) saturate(140%);}
+#capov .sheet{
+  background:rgba(23,34,51,.90);
+  border:1px solid rgba(255,255,255,.14);
+  border-bottom:0;
+  border-radius:22px 22px 0 0;
+  box-shadow:0 -20px 60px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.18);
+  -webkit-backdrop-filter:blur(24px) saturate(170%);
+  backdrop-filter:blur(24px) saturate(170%);
+}
+
+/* Carte de trajet : intégrée à la matière générale sans double cadre lourd. */
+.mapcard{padding:7px;}
+.mapcard svg{border-radius:12px;overflow:hidden;}
+.cloudmap{border-color:rgba(255,255,255,.10);}
+
+/* Barre basse flottante, proche du chrome de Carnet Pêche. */
+footer{
+  left:10px;
+  right:10px;
+  bottom:calc(8px + var(--safe-bottom));
+  width:auto;
+  max-width:740px;
+  margin:0 auto;
+  padding:7px 6px;
+  gap:2px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:rgba(23,34,51,.76);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 14px 36px rgba(0,0,0,.40);
+  -webkit-backdrop-filter:blur(22px) saturate(185%);
+  backdrop-filter:blur(22px) saturate(185%);
+}
+footer button{
+  min-width:0;
+  min-height:48px;
+  padding:5px 2px;
+  border-radius:12px;
+  color:var(--navoff);
+  transition:color .12s ease,background .12s ease,transform .12s ease;
+}
+footer button small{color:inherit;font-size:8.5px;margin-top:3px;}
+footer button:active{color:var(--accent);background:rgba(var(--accent-rgb),.10);transform:scale(.95);}
+footer button:active small{color:inherit;}
+#status{
+  bottom:calc(76px + var(--safe-bottom));
+  background:rgba(23,34,51,.90);
+  color:#DFF8EE;
+  border:1px solid rgba(var(--accent-rgb),.42);
+  box-shadow:0 8px 24px rgba(0,0,0,.32);
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+}
+
+/* Fallback si le navigateur ne sait pas flouter l'arrière-plan. */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  header,footer{background:rgba(23,34,51,.96);}
+  .card,.card.hpro,.card.hper{background:rgba(23,34,51,.92);}
+  #capov .sheet{background:#172233;}
+}
+
+@media (min-width:760px){
+  main{padding-left:0;padding-right:0;}
+}
+@media (prefers-reduced-motion:reduce){
+  .pill,.navibtn,.gpsbtn,.cta,.sessbtn,.addrow button,.qrit,footer button{transition:none!important;}
+}
