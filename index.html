@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0E1626">
+<meta name="theme-color" content="#0F1720">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
 <title>Carnet Japon 2026</title>
 <style>
 :root { --bg:#0F2540; --panel:#1B3A63; --panel2:#204070; --line:#14171C; --txt:#EFE6D3; --mut:#9FB0C8; --blue:#3E6FA8; --green:#4C7A4A; --red:#C6432E; --red2:#C6432E; --gold:#D9A441; --navoff:#5A7195; }
@@ -169,6 +169,361 @@ svg .hit { cursor:pointer; }
 @keyframes pingwave { 0% { r:5; stroke-width:2.5; stroke-opacity:.8; } 100% { r:20; stroke-width:.3; stroke-opacity:0; } }
 .ping { animation:pingwave 2.8s ease-out infinite; transform-box:fill-box; transform-origin:center; }
 }
+
+
+/* ========================================================================== */
+/* CARNET JAPON 2026 — PORT VISUEL « CARNET PÊCHE / GLASS »                  */
+/* Couche de rendu uniquement : les vues, données et comportements restent    */
+/* inchangés. Le système reprend palette, nappe, verre, élévation, rythme et   */
+/* micro-interactions de Carnet Pêche JP V6.5.23.                             */
+/* ========================================================================== */
+:root{
+  --bg:#0F1720;
+  --panel:#172233;
+  --panel2:#1E2C40;
+  --surface-3:#26364E;
+  --accent-rgb:0,174,116;
+  --accent:rgb(var(--accent-rgb));
+  --accent-dim:#016E4A;
+  --line:rgba(var(--accent-rgb),.16);
+  --txt:#EDEEF0;
+  --mut:#8B97A8;
+  --label:#D6DBE2;
+  --blue:var(--accent);
+  --green:var(--accent);
+  --red:#E89AA8;
+  --red2:var(--accent);
+  --gold:#D9B66F;
+  --navoff:#728093;
+  --glass-tint:rgba(23,34,51,.72);
+  --glass-panel:rgba(23,34,51,.46);
+  --glass-panel-soft:rgba(30,44,64,.42);
+  --glass-edge:inset 0 1px 0 rgba(255,255,255,.24), inset 0 -1px 0 rgba(0,0,0,.30), 0 4px 14px rgba(0,0,0,.28);
+  --glass-lift:0 10px 30px rgba(0,0,0,.38), 0 2px 6px rgba(0,0,0,.22);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --ease-out:cubic-bezier(.23,1,.32,1);
+}
+html{font-size:100%; background:var(--bg);}
+body{
+  margin:0;
+  background:transparent;
+  position:relative;
+  isolation:isolate;
+  color:var(--txt);
+  font-family:'IBM Plex Sans','Avenir Next','Segoe UI',system-ui,sans-serif;
+  padding-bottom:calc(86px + var(--safe-bottom));
+  min-height:100vh;
+  overscroll-behavior-y:none;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 62% 46% at 10% 4%, rgba(34,190,214,.58) 0%, transparent 68%),
+    radial-gradient(ellipse 54% 44% at 92% 15%, rgba(46,216,176,.48) 0%, transparent 66%),
+    radial-gradient(ellipse 52% 54% at 20% 56%, rgba(38,152,200,.46) 0%, transparent 70%),
+    radial-gradient(ellipse 56% 42% at 86% 74%, rgba(42,208,172,.42) 0%, transparent 66%),
+    radial-gradient(ellipse 60% 40% at 38% 100%, rgba(30,172,196,.38) 0%, transparent 70%),
+    var(--bg);
+}
+
+/* Typographie : même logique éditoriale que Carnet Pêche. */
+h1,.card h2,.train .tr,.count .big,.catchli .esp,.tot.big,#capov h3{
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  letter-spacing:-.015em;
+}
+.jp{font-family:'Shippori Mincho',serif;}
+.dates,.tag,.sec,label.f,.subh,.swipehint,.tbadge,.zonebadge,.cal .hd,footer button small,
+.qrit .qd,.cloudmap .cmfoot,.li .dl{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+}
+
+/* Chrome supérieur en verre. */
+header{
+  position:sticky;
+  top:0;
+  z-index:30;
+  max-width:none;
+  margin:0;
+  padding:calc(16px + var(--safe-top)) 16px 12px;
+  background:var(--glass-tint);
+  border:0;
+  backdrop-filter:blur(20px) saturate(200%);
+  -webkit-backdrop-filter:blur(20px) saturate(200%);
+  box-shadow:var(--glass-edge);
+}
+header::after{
+  content:'';
+  position:absolute;
+  left:0;right:0;bottom:-16px;height:16px;
+  background:linear-gradient(180deg,rgba(15,23,32,.55),transparent);
+  pointer-events:none;
+}
+header>div{max-width:760px;margin:0 auto;align-items:center!important;}
+header h1{font-size:1.45rem;font-weight:400;line-height:1.08;margin:0;}
+header h1 small{color:var(--accent);font-size:.72em;vertical-align:.08em;}
+header h1 span{
+  color:var(--text-muted,var(--mut))!important;
+  font-family:'IBM Plex Mono',monospace!important;
+  font-size:.6875rem!important;
+  letter-spacing:.14em!important;
+  opacity:.72!important;
+}
+#jj{
+  color:var(--accent)!important;
+  background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(255,255,255,.05) 48%,rgba(0,0,0,.20))!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  border-radius:999px!important;
+  padding:8px 12px!important;
+  font-family:'IBM Plex Mono',monospace!important;
+  font-size:.6875rem!important;
+  font-weight:600!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.38), inset 0 -2px 4px rgba(0,0,0,.26), 0 4px 12px rgba(0,0,0,.30), 0 0 0 1px rgba(var(--accent-rgb),.14)!important;
+}
+main{padding:18px 14px calc(104px + var(--safe-bottom));max-width:760px;margin:0 auto;}
+
+/* Premier niveau : vraies cartes en verre au-dessus de la nappe. */
+.card{
+  background:var(--glass-panel);
+  background-image:none;
+  border:1px solid rgba(var(--accent-rgb),.10);
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:14px;
+  box-shadow:var(--glass-edge),var(--glass-lift);
+  backdrop-filter:blur(28px) saturate(200%) brightness(108%);
+  -webkit-backdrop-filter:blur(28px) saturate(200%) brightness(108%);
+  overflow:hidden;
+  position:relative;
+  transition:transform .12s var(--ease-out),box-shadow .12s var(--ease-out),border-color .15s var(--ease-out),background .15s var(--ease-out);
+}
+.card.hpro,.card.hper{
+  background:var(--glass-panel);
+  background-image:none;
+  border:1px solid rgba(var(--accent-rgb),.12);
+  box-shadow:var(--glass-edge),var(--glass-lift);
+}
+.card:has(> .destgrid):active{transform:translateY(2px);}
+.card h2{font-size:1rem;font-weight:600;line-height:1.25;gap:8px;}
+.mapcard{padding:6px;}
+
+/* Les rubriques deviennent des libellés calmes, pas des bandes dorées. */
+.sec{
+  background:none;
+  color:var(--label);
+  margin:18px 0 8px;
+  padding:10px 0 6px;
+  border-top:1px solid var(--line);
+  box-shadow:none;
+  font-size:.6875rem;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.sec .cnt{color:var(--mut);font-weight:500;letter-spacing:0;text-transform:none;}
+.card>.sec:first-of-type{margin-top:14px;}
+
+/* Badges et informations secondaires. */
+.tag{font-size:.6875rem;line-height:1.3;padding:3px 8px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:500;letter-spacing:.05em;}
+.tag.pro{background:rgba(72,174,202,.10);border-color:rgba(72,174,202,.22);color:#86C9DC;}
+.tag.perso{background:rgba(var(--accent-rgb),.10);border-color:rgba(var(--accent-rgb),.26);color:var(--accent);}
+.tag.archive{background:rgba(139,151,168,.08);border-color:rgba(139,151,168,.16);color:var(--mut);}
+.dates{color:var(--gold);font-size:.75rem;font-weight:500;letter-spacing:.02em;}
+.brief{font-size:.875rem;line-height:1.58;}
+.subh{font-size:.6875rem;text-transform:uppercase;letter-spacing:.08em;color:var(--label);}
+
+/* Second niveau : voile clair, jamais un second backdrop-filter. */
+.train,.taq,.qrit,.catchli,.cloudmap,.stp .ic,.chp,.destgrid button,
+textarea,input.f,select.f,.addrow input,.addrow select,.taq input.no{
+  background:rgba(255,255,255,.055);
+  border-color:var(--line);
+  color:var(--txt);
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.train,.qrit,.catchli,.cloudmap{border:1px solid var(--line);border-radius:12px;}
+.train{padding:12px;margin:8px 0;}
+.train .badge{
+  background:linear-gradient(160deg,rgba(255,255,255,.20),rgba(var(--accent-rgb),.78));
+  color:#0F1720;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;
+  font-size:.6875rem;
+  font-family:'IBM Plex Mono',monospace;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.36),0 3px 10px rgba(0,0,0,.24);
+}
+.train.critique .badge{background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(232,154,168,.78));color:#15171B;}
+.train .tn{font-size:.75rem;line-height:1.5;}
+.taq{border-left:3px solid var(--accent);border-top:0;border-right:0;border-bottom:0;border-radius:0 12px 12px 0;padding:10px 12px;}
+.taq .d b,.chp b{color:var(--accent);}
+
+/* Champs et actions. */
+label.f{font-size:.6875rem;letter-spacing:.08em;color:var(--mut);}
+textarea,input.f,select.f,.addrow input,.addrow select{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:10px 12px;
+  font-size:.875rem;
+  transition:border-color .15s var(--ease-out),box-shadow .15s var(--ease-out),background .15s var(--ease-out);
+}
+textarea:focus,input.f:focus,select.f:focus,.addrow input:focus,.addrow select:focus{
+  border-color:rgba(var(--accent-rgb),.62);
+  box-shadow:0 0 0 3px rgba(var(--accent-rgb),.10);
+  background:rgba(255,255,255,.075);
+}
+input[type=checkbox]{accent-color:var(--accent);}
+.hotellink,.adr,.tel,.cloudmap .cmfoot a,.back{color:var(--accent);}
+
+/* Boutons : bille de verre / accent actif, comme les pastilles de Carnet Pêche. */
+.pill,.destgrid button,.chp,.gpsbtn,.navibtn,.nbtn,.addrow button,.sessbtn,.cta{
+  transition:transform .12s var(--ease-out),box-shadow .12s var(--ease-out),background .18s var(--ease-out),border-color .18s var(--ease-out),color .18s var(--ease-out);
+}
+.pill,.destgrid button,.chp,.gpsbtn,.navibtn{
+  background:linear-gradient(160deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,.055) 45%,rgba(0,0,0,.20) 100%);
+  border:1px solid rgba(255,255,255,.15);
+  color:var(--txt);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -2px 4px rgba(0,0,0,.24),0 4px 12px rgba(0,0,0,.26),0 0 0 1px rgba(var(--accent-rgb),.12);
+  text-decoration:none;
+}
+.navibtn{color:var(--accent);padding:11px 12px;border-radius:12px;}
+.pill:active,.destgrid button:active,.chp:active,.gpsbtn:active,.navibtn:active,.addrow button:active,.sessbtn:active,.cta:active{
+  transform:translateY(2px) scale(.98);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 1px 4px rgba(0,0,0,.38);
+}
+.addrow button,.sessbtn.go,.cta{
+  background:linear-gradient(160deg,rgba(255,255,255,.30),rgba(var(--accent-rgb),.92));
+  color:#0F1720;
+  border:1px solid rgba(255,255,255,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.46),inset 0 -2px 4px rgba(0,0,0,.20),0 4px 14px rgba(0,0,0,.28),0 0 0 1px rgba(var(--accent-rgb),.32);
+}
+.sessbtn:not(.go){background:linear-gradient(160deg,rgba(255,255,255,.18),rgba(232,154,168,.72));color:#17191D;border:1px solid rgba(255,255,255,.20);}
+
+/* Listes / séparateurs. */
+.li,.poi,.phr,.tot{border-bottom-color:var(--line);}
+.li,.poi{padding-top:10px;padding-bottom:10px;}
+.li span,.poi a{font-size:.875rem;}
+.mynote,.phr .ro,.tot.big,.zonebadge{color:var(--gold);}
+.nbtn{color:var(--mut);}
+
+/* Calendrier : on conserve la couleur métier, assombrie comme une donnée sur verre. */
+.cal{gap:5px;}
+.cal .hd{font-size:.6875rem;font-weight:500;color:var(--mut);}
+.cal .day{
+  color:var(--txt);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  box-shadow:inset 0 0 0 999px rgba(15,23,32,.34),inset 0 1px 0 rgba(255,255,255,.12),0 2px 6px rgba(0,0,0,.20);
+  text-shadow:0 1px 2px rgba(0,0,0,.45);
+  transition:transform .12s var(--ease-out),box-shadow .12s var(--ease-out);
+}
+.cal .day:active{transform:translateY(2px) scale(.97);}
+.cal .day.now::after{background:linear-gradient(150deg,#EEA0AF,#B54D64);box-shadow:0 4px 12px rgba(0,0,0,.38),0 0 0 2px var(--bg),inset 0 1px 0 rgba(255,255,255,.35);}
+
+/* Pêche / sessions / médias. */
+.spbtn{
+  background:rgba(255,255,255,.90);
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:16px;
+  box-shadow:0 8px 22px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.65);
+  color:#24303C;
+  transition:transform .12s var(--ease-out),box-shadow .12s var(--ease-out);
+}
+.spbtn:active{transform:translateY(3px) scale(.97);box-shadow:0 2px 8px rgba(0,0,0,.28);}
+.spbtn .lb{color:#26313A;}
+.sessbar{background:rgba(var(--accent-rgb),.09);border-color:rgba(var(--accent-rgb),.32);border-radius:12px;}
+.sessbar.live{background:rgba(232,154,168,.09);border-color:rgba(232,154,168,.34);}
+.sessbar b{color:var(--accent);}
+.catchli{background:rgba(255,255,255,.055);}
+.thumb,.catchli img{border-radius:10px;}
+.zonebadge{background:rgba(217,182,111,.10);border:1px solid rgba(217,182,111,.16);border-radius:999px;}
+.cloudmap{background:rgba(255,255,255,.045);}
+
+/* Overlays et couche flottante. */
+#capov{
+  background:rgba(4,8,14,.58);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+}
+#capov .sheet{
+  background:var(--surface-3);
+  border-radius:20px 20px 0 0;
+  box-shadow:0 -10px 36px rgba(0,0,0,.38),var(--glass-edge);
+  padding-bottom:calc(18px + var(--safe-bottom));
+}
+.gpsbtn{color:var(--accent);border-radius:10px;padding:10px 12px;}
+#status{
+  bottom:calc(86px + var(--safe-bottom));
+  background:rgba(38,54,78,.94);
+  color:var(--accent);
+  border:1px solid rgba(var(--accent-rgb),.28);
+  box-shadow:var(--glass-edge),0 8px 22px rgba(0,0,0,.34);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.6875rem;
+}
+
+/* Navigation basse flottante en verre. */
+footer{
+  position:fixed;
+  left:50%;right:auto;bottom:0;
+  transform:translateX(-50%);
+  width:min(100%,760px);
+  background:rgba(23,34,51,.80);
+  border:0;
+  border-radius:18px 18px 0 0;
+  padding:8px 6px calc(8px + var(--safe-bottom));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 -10px 30px rgba(0,0,0,.34);
+  backdrop-filter:blur(22px) saturate(190%);
+  -webkit-backdrop-filter:blur(22px) saturate(190%);
+  z-index:40;
+}
+footer button{
+  color:var(--navoff);
+  border-radius:12px;
+  min-height:48px;
+  padding:6px 3px;
+  transition:transform .12s var(--ease-out),background .15s var(--ease-out),color .15s var(--ease-out);
+}
+footer button small{font-size:.625rem;margin-top:4px;color:inherit!important;letter-spacing:.01em;}
+footer button:active{transform:translateY(2px) scale(.96);background:rgba(255,255,255,.05);color:var(--accent);}
+footer button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
+
+/* Petits raffinements de matière. */
+.qrit{background:rgba(255,255,255,.055);}
+.qrit img{border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.22);}
+.empty{font-size:.8125rem;color:var(--mut);}
+details.far summary{font-family:'IBM Plex Mono',monospace;font-size:.6875rem;color:var(--mut);font-weight:500;}
+.swipehint{font-size:.6875rem;}
+
+@supports (corner-shape:squircle){
+  .card,.train,.qrit,.catchli,.cloudmap,.spbtn,#capov .sheet{corner-shape:squircle;}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}
+}
+
+@media (prefers-reduced-transparency:reduce){
+  header,footer,.card,#status{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+  header,footer{background:var(--panel)!important;}
+  .card{background:var(--panel)!important;}
+  body::before{opacity:.22;}
+}
+
+@media (max-width:380px){
+  header{padding-left:12px;padding-right:12px;}
+  header h1{font-size:1.28rem;}
+  #jj{padding:7px 9px!important;}
+  main{padding-left:12px;padding-right:12px;}
+  footer{gap:2px;padding-left:3px;padding-right:3px;}
+  footer button small{font-size:.58rem;}
+}
+
 </style>
 </head>
 <body>
